@@ -6,7 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
+  fontColor = 'blue';
+  sayHelloId = 1;
+  canClick = false;
+  message = 'Hello, World';
 
-  constructor() {}
+  constructor() { }
+
+  sayMessage() {
+    alert(this.message);
+  }
 
 }
