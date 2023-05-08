@@ -7,6 +7,8 @@ import { Tab1Page } from './tab1.page';
 import { Tab1PageRoutingModule } from './tab1-routing.module';
 import { Level101Component } from '../components/level101/level101.component';
 import { Level102Component } from '../components/level102/level102.component';
+import { NameChildComponent } from '../components/name-child/name-child.component';
+import { VoterComponent } from '../components/voter/voter.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,12 @@ import { Level102Component } from '../components/level102/level102.component';
     FormsModule,
     Tab1PageRoutingModule
   ],
-  declarations: [Tab1Page, Level101Component, Level102Component]
+  declarations: [
+    Tab1Page,
+    Level101Component,
+    Level102Component,
+    NameChildComponent,
+    VoterComponent
+  ]
 })
 export class Tab1PageModule { }

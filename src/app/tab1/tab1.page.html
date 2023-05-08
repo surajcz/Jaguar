@@ -12,4 +12,17 @@
 
   <app-level102></app-level102>
 
+  <div style="border-top:2px solid blue"></div>
+
+  <h2>Master controls {{names.length}} names</h2>
+  <app-name-child *ngFor="let name of names" [name]="name"></app-name-child>
+
+  <div style="border-top:2px solid blue"></div>
+
+  <p>Should mankind colonize the Universe ?</p>
+  <h3>Agree: {{agreed}}, Disagree: {{disagreed}}</h3>
+  <ion-button (click)="reset()">Reset Count</ion-button>
+  <app-voter *ngFor="let voter of voters" [name]="voter" [resetCount]="resetCount" (voted)="onVoted($event)">
+  </app-voter>
+
 </ion-content>

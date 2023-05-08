@@ -6,7 +6,29 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+  names = ['Dr. IQ', '   ', '  Bombasto  '];
+  agreed = 0;
+  disagreed = 0;
+  voters = ['Dr. IQ', 'Celeritas', 'Bombasto'];
+  resetCount = false;
 
-  constructor() {}
+  constructor() { }
+
+  onVoted(data: any) {
+    if (data.agreed) {
+      this.agreed++;
+    } else {
+      this.disagreed++;
+    }
+    if (data.resetCount) {
+      this.resetCount = false;
+    }
+  }
+
+  reset() {
+    this.agreed = 0;
+    this.disagreed = 0;
+    this.resetCount = true;
+  }
 
 }

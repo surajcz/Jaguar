@@ -10,6 +10,7 @@ export class Tab2Page {
   sayHelloId = 1;
   canClick = false;
   message = 'Hello, World';
+  birthday = new Date(1999, 1, 28);
 
   constructor() { }
 
