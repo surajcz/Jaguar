@@ -1,5 +1,7 @@
 {
   "name": "Jaguar",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

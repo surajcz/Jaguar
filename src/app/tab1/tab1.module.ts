@@ -9,6 +9,7 @@ import { Level101Component } from '../components/level101/level101.component';
 import { Level102Component } from '../components/level102/level102.component';
 import { NameChildComponent } from '../components/name-child/name-child.component';
 import { VoterComponent } from '../components/voter/voter.component';
+import { ImagePickerComponent } from '../components/image-picker/image-picker.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { VoterComponent } from '../components/voter/voter.component';
     Level101Component,
     Level102Component,
     NameChildComponent,
-    VoterComponent
+    VoterComponent,
+    ImagePickerComponent
   ]
 })
 export class Tab1PageModule { }

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { ImagePickerComponent } from '../components/image-picker/image-picker.component';
 
 @Component({
   selector: 'app-tab1',
@@ -12,7 +14,9 @@ export class Tab1Page {
   voters = ['Dr. IQ', 'Celeritas', 'Bombasto'];
   resetCount = false;
 
-  constructor() { }
+  constructor(
+    private modalCtrl: ModalController,
+  ) { }
 
   onVoted(data: any) {
     if (data.agreed) {
@@ -29,6 +33,18 @@ export class Tab1Page {
     this.agreed = 0;
     this.disagreed = 0;
     this.resetCount = true;
+  }
+
+  async openModal(val: any) {
+    let component: any;
+    if (val == 'image-picker') {
+      component = ImagePickerComponent;
+    }
+    const modal = await this.modalCtrl.create({
+      component: component,
+    });
+    modal.present();
+
   }
 
 }
