@@ -1,16 +1,25 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Google Login
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-button color="success" expand="block" (click)="googleLogin()">login using Google</ion-button>
 
+  <div class="outter" *ngIf="name">
+    <div class="user-image">
+      <ion-img src="{{ image }}"></ion-img>
+    </div>
+    <div class="user-details">
+      <h2>{{ name }}</h2>
+      <h3>{{ email }}</h3>
+    </div>
+  </div>
+
+  <div class="clock">
+    <p id="demo" style="text-align:center;"></p>
+  </div>
 </ion-content>

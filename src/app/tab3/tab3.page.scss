@@ -1,0 +1,15 @@
+div.outter {
+    div.user-image {
+        width:100px;
+        height: 100px;
+        margin:0 auto;
+        border-radius: 50%;
+        overflow: hidden;
+        ion-img {
+            width:100%;
+        }
+    }
+    div.user-details {
+        text-align: center;
+    }
+}
