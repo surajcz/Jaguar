@@ -2,15 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 
-// import { FacebookLoginPlugin } from '@capacitor-community/facebook-login';
-// import { Plugins, registerWebPlugin } from '@capacitor/core';
-// import { isPlatform } from '@ionic/angular';
+import { FacebookLoginPlugin } from '@capacitor-community/facebook-login';
+import { Plugins, registerWebPlugin } from '@capacitor/core';
+import { isPlatform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 
-// import { FacebookLogin } from '@capacitor-community/facebook-login';
+import { FacebookLogin } from '@capacitor-community/facebook-login';
 // registerWebPlugin(FacebookLogin);
 
-// import { FCM } from '@ionic-native/fcm/ngx';
 import { Platform } from '@ionic/angular';
 
 
@@ -31,38 +30,20 @@ export class Tab3Page implements OnInit {
   email: any;
   image: any;
 
-  // user: any;
-  // token: any;
-  // fbLogin: FacebookLoginPlugin
+  user: any = null;
+  token: any = null;
+  fbLogin: FacebookLoginPlugin
 
   pushes: any = [];
 
   constructor(
     private googlePlus: GooglePlus,
     private http: HttpClient,
-    // private fcm: FCM,
     public plt: Platform
   ) {
-    // this.fbLogin = FacebookLogin;
+    this.fbLogin = FacebookLogin;
 
-    // this.setupFbLogin();
-
-
-    // this.plt.ready()
-    //   .then(() => {
-    //     this.fcm.onNotification().subscribe(data => {
-    //       if (data.wasTapped) {
-    //         console.log("Received in background");
-    //       } else {
-    //         console.log("Received in foreground");
-    //       };
-    //     });
-
-    //     this.fcm.onTokenRefresh().subscribe(token => {
-    //       // Register your new token in your back-end if you want
-    //       // backend.registerToken(token);
-    //     });
-    //   })
+    this.setupFbLogin();
 
   }
 
@@ -86,21 +67,21 @@ export class Tab3Page implements OnInit {
     // On success, we should be able to receive notifications
     PushNotifications.addListener('registration',
       (token: Token) => {
-        alert('Push registration success, token: ' + token.value);
+        console.log('Push registration success, token: ' + token.value);
       }
     );
 
     // Some issue with our setup and push will not work
     PushNotifications.addListener('registrationError',
       (error: any) => {
-        alert('Error on registration: ' + JSON.stringify(error));
+        console.log('Error on registration: ' + JSON.stringify(error));
       }
     );
 
     // Show us the notification payload if the app is open on our device
     PushNotifications.addListener('pushNotificationReceived',
       (notification: PushNotificationSchema) => {
-        alert('Push received: ' + JSON.stringify(notification));
+        console.log('Push received: ' + JSON.stringify(notification));
       }
     );
 
@@ -128,74 +109,59 @@ export class Tab3Page implements OnInit {
 
 
 
-  // async setupFbLogin() {
-  //   if (isPlatform('desktop')) {
-  //     this.fbLogin = FacebookLogin;
-  //   } else {
-  //     // Use the native implementation inside a real app!
-  //     // const { FacebookLogin } = Plugins;
-  //     this.fbLogin = FacebookLogin;
-  //   }
-  // }
+  async setupFbLogin() {
+    if (isPlatform('desktop')) {
+      this.fbLogin = FacebookLogin;
+    } else {
+      // Use the native implementation inside a real app!
+      // const { FacebookLogin } = Plugins;
+      this.fbLogin = FacebookLogin;
+    }
+  }
 
-  // async login() {
-  //   const FACEBOOK_PERMISSIONS = ['email', 'user_birthday'];
-  //   const result = await this.fbLogin.login({ permissions: FACEBOOK_PERMISSIONS });
+  async login() {
+    const FACEBOOK_PERMISSIONS = ['email', 'user_birthday'];
+    const result = await this.fbLogin.login({ permissions: FACEBOOK_PERMISSIONS });
 
-  //   console.log('result------', result)
+    console.log('result------', result)
 
-  //   if (result.accessToken && result.accessToken.userId) {
-  //     this.token = result.accessToken;
-  //     this.loadUserData();
-  //   } else if (result.accessToken && !result.accessToken.userId) {
-  //     // Web only gets the token but not the user ID
-  //     // Directly call get token to retrieve it now
-  //     this.getCurrentToken();
-  //   } else {
-  //     // Login failed
-  //   }
-  // }
+    if (result.accessToken && result.accessToken.userId) {
+      this.token = result.accessToken;
+      this.loadUserData();
+    } else if (result.accessToken && !result.accessToken.userId) {
+      // Web only gets the token but not the user ID
+      // Directly call get token to retrieve it now
+      this.getCurrentToken();
+    } else {
+      // Login failed
+    }
+  }
 
-  // async getCurrentToken() {
-  //   const result = await this.fbLogin.getCurrentAccessToken();
+  async getCurrentToken() {
+    const result = await this.fbLogin.getCurrentAccessToken();
 
-  //   if (result.accessToken) {
-  //     this.token = result.accessToken;
-  //     this.loadUserData();
-  //   } else {
-  //     // Not logged in.
-  //   }
-  // }
+    if (result.accessToken) {
+      this.token = result.accessToken;
+      this.loadUserData();
+    } else {
+      // Not logged in.
+    }
+  }
 
-  // async loadUserData() {
-  //   const url = `https://graph.facebook.com/${this.token.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
-  //   this.http.get(url).subscribe(res => {
-  //     this.user = res;
-  //   });
-  // }
+  async loadUserData() {
+    const url = `https://graph.facebook.com/${this.token.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
+    this.http.get(url).subscribe(res => {
+      this.user = res;
+    });
+  }
 
-  // async logout() {
-  //   await this.fbLogin.logout();
-  //   this.user = null;
-  //   this.token = null;
-  // }
-
-
+  async logout() {
+    await this.fbLogin.logout();
+    this.user = null;
+    this.token = null;
+  }
 
 
-
-  // subscribeToTopic() {
-  //   this.fcm.subscribeToTopic('enappd');
-  // }
-  // getToken() {
-  //   this.fcm.getToken().then(token => {
-  //     // Register your new token in your back-end if you want
-  //     // backend.registerToken(token);
-  //   });
-  // }
-  // unsubscribeFromTopic() {
-  //   this.fcm.unsubscribeFromTopic('enappd');
-  // }
 
 
 
