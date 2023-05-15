@@ -5,6 +5,8 @@ import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx'
 import { Crop, CropOptions } from '@ionic-native/crop/ngx';
 import { File } from '@ionic-native/file/ngx';
 
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+
 @Component({
   selector: 'app-image-picker',
   templateUrl: './image-picker.component.html',
@@ -41,6 +43,12 @@ export class ImagePickerComponent implements OnInit {
       console.log('111111---results', results)
       for (var i = 0; i < results.length; i++) {
         console.log('22222---results[i]', results[i])
+        // let val = results[i];
+        // let valArr = val.split("");
+        // valArr.splice(6, 1);
+        // console.log('---val------', valArr)
+        // let selected = valArr.join("");
+        // console.log('---selected------', selected)
         this.imageCropMethod(results[i]);
       }
     }, (error) => {
@@ -53,8 +61,8 @@ export class ImagePickerComponent implements OnInit {
     this.crop.crop(pathImage, this.cropOpt)
       .then(
         newPath => {
-          this.croppedImg(newPath.split('?')[0])
           console.log('44444')
+          this.croppedImg(newPath.split('?')[0])
 
         },
         error => {
@@ -62,7 +70,7 @@ export class ImagePickerComponent implements OnInit {
         }
       );
   }
-  croppedImg(pathImage: any) {
+  async croppedImg(pathImage: any) {
     console.log('55555---pathImage', pathImage)
     this.loading = true;
     var copyUrl = pathImage;
@@ -70,6 +78,19 @@ export class ImagePickerComponent implements OnInit {
     var imgName = splitPath[splitPath.length - 1];
     var fileUrl = pathImage.split(imgName)[0];
     console.log('66666---fileUrl', fileUrl, '---imgName', imgName)
+
+    // let val = results[i];
+    // let valArr = fileUrl.split("");
+    // valArr.splice(6, 1);
+    // console.log('---val------', valArr)
+    // let selected = valArr.join("");
+    // console.log('---selected------', selected)
+
+    const contents = await Filesystem.readFile({
+      path: copyUrl,
+    });
+    console.log('-----contents----', contents)
+
 
     this.file.readAsDataURL(fileUrl, imgName).then(base64 => {
       console.log('77777---base64', base64)
@@ -79,7 +100,7 @@ export class ImagePickerComponent implements OnInit {
 
       this.loading = false;
     }, error => {
-      alert(error);
+      console.error(error);
       this.loading = false;
     });
   }

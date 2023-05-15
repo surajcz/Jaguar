@@ -1,16 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
-
-import { FacebookLoginPlugin } from '@capacitor-community/facebook-login';
-import { Plugins, registerWebPlugin } from '@capacitor/core';
-import { isPlatform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-
-import { FacebookLogin } from '@capacitor-community/facebook-login';
-// registerWebPlugin(FacebookLogin);
-
 import { Platform } from '@ionic/angular';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 
 
 import {
@@ -30,21 +23,36 @@ export class Tab3Page implements OnInit {
   email: any;
   image: any;
 
-  user: any = null;
-  token: any = null;
-  fbLogin: FacebookLoginPlugin
-
   pushes: any = [];
+
+  isLoggedIn = false;
+  users = {
+    id: '',
+    name: '',
+    email: '',
+    picture: {
+      data: {
+        url: ''
+      }
+    }
+  };
 
   constructor(
     private googlePlus: GooglePlus,
     private http: HttpClient,
-    public plt: Platform
+    public plt: Platform,
+    private fb: Facebook
   ) {
-    this.fbLogin = FacebookLogin;
-
-    this.setupFbLogin();
-
+    fb.getLoginStatus()
+      .then(res => {
+        console.log(res.status);
+        if (res.status === 'connect') {
+          this.isLoggedIn = true;
+        } else {
+          this.isLoggedIn = false;
+        }
+      })
+      .catch(e => console.log(e));
   }
 
 
@@ -109,60 +117,39 @@ export class Tab3Page implements OnInit {
 
 
 
-  async setupFbLogin() {
-    if (isPlatform('desktop')) {
-      this.fbLogin = FacebookLogin;
-    } else {
-      // Use the native implementation inside a real app!
-      // const { FacebookLogin } = Plugins;
-      this.fbLogin = FacebookLogin;
-    }
+  fbLogin() {
+    this.fb.login(['public_profile'])
+      .then(res => {
+
+        if (res.status === 'connected') {
+
+          this.isLoggedIn = true;
+          this.getUserDetail(res.authResponse.userID);
+        } else {
+
+          this.isLoggedIn = false;
+        }
+      })
+      .catch(e => console.log('Error logging into Facebook', e));
   }
 
-  async login() {
-    const FACEBOOK_PERMISSIONS = ['email', 'user_birthday'];
-    const result = await this.fbLogin.login({ permissions: FACEBOOK_PERMISSIONS });
+  getUserDetail(userid: any) {
 
-    console.log('result------', result)
+    this.fb.api('/' + userid + '/?fields=id,email,name,picture', ['public_profile'])
+      .then(res => {
 
-    if (result.accessToken && result.accessToken.userId) {
-      this.token = result.accessToken;
-      this.loadUserData();
-    } else if (result.accessToken && !result.accessToken.userId) {
-      // Web only gets the token but not the user ID
-      // Directly call get token to retrieve it now
-      this.getCurrentToken();
-    } else {
-      // Login failed
-    }
+        console.log(res);
+        this.users = res;
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
-  async getCurrentToken() {
-    const result = await this.fbLogin.getCurrentAccessToken();
-
-    if (result.accessToken) {
-      this.token = result.accessToken;
-      this.loadUserData();
-    } else {
-      // Not logged in.
-    }
+  logout() {
+    this.fb.logout()
+      .then(res => this.isLoggedIn = false)
+      .catch(e => console.log('Error logout from Facebook', e));
   }
-
-  async loadUserData() {
-    const url = `https://graph.facebook.com/${this.token.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
-    this.http.get(url).subscribe(res => {
-      this.user = res;
-    });
-  }
-
-  async logout() {
-    await this.fbLogin.logout();
-    this.user = null;
-    this.token = null;
-  }
-
-
-
-
 
 }

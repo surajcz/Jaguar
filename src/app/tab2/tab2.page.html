@@ -14,9 +14,15 @@
 
   <h2 id="birthday-date-pipe">Birthday DatePipe</h2>
   <p>The hero's birthday is {{ birthday | date }}</p>
-
   <p>The hero's birthday is {{ birthday | date:"MM/dd/yy" }} </p>
 
-  <!-- <p>The hero's birthday is {{ birthday | dateFormat }}</p> -->
+  <div style="border-top:2px solid blue; margin-block:20px;"></div>
+
+  <h4>Vibrate Once</h4>
+  <ion-button expand="full" (click)="invokeVibration(3000)">Vibrate for 3 seconds</ion-button>
+  <h4>Vibrate with pattern</h4>
+  <ion-button expand="full" (click)="vibratePattern([200, 200, 200, 200, 200])">Vibration Pattern</ion-button>
+  <h4>Revoke Existing Vibration</h4>
+  <ion-button expand="full" (click)="reovkeVibration()">Revoke vibration</ion-button>
 
 </ion-content>

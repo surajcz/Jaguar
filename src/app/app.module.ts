@@ -13,7 +13,9 @@ import { File } from '@ionic-native/file/ngx';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 import { HttpClientModule } from '@angular/common/http';
-// import { FCM } from '@ionic-native/fcm/ngx'
+import { Facebook } from '@ionic-native/facebook/ngx';
+
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +30,8 @@ import { HttpClientModule } from '@angular/common/http';
     Crop,
     File,
     GooglePlus,
-    // FCM,
+    Facebook,
+    Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

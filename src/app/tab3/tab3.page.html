@@ -25,24 +25,29 @@
 
 
 
-  <ion-card *ngIf="user">
-    <img [src]="user.picture.data.url">
-    <ion-card-header>
-      <ion-card-title>
-        {{ user.name }}
-      </ion-card-title>
-      <ion-card-subtitle>
-        {{ user.birthday }}
-      </ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      {{ user.email }}
-      <ion-button (click)="logout()" expand="full">Logout</ion-button>
-    </ion-card-content>
-  </ion-card>
-  <ion-button (click)="login()" expand="full">Login with FB</ion-button>
 
-
-
+  <div class="ion-padding" *ngIf="isLoggedIn === true">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>Hi, {{users.name}}</ion-card-subtitle>
+        <ion-card-title>{{users.email}}</ion-card-title>
+      </ion-card-header>
+      <img src="{{users.picture.data.url}}" width="100" alt="{{users.name}}" />
+      <ion-card-content>
+        <p>
+          <ion-button expand="full" color="secondary" (click)="logout()">
+            Logout
+            <ion-icon name="log-out"></ion-icon>
+          </ion-button>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div class="ion-padding" *ngIf="isLoggedIn === false">
+    <ion-button disabled="true" expand="full" color="primary" (click)="fbLogin()">
+      Login with
+      <ion-icon name="logo-facebook"></ion-icon>
+    </ion-button>
+  </div>
 
 </ion-content>
