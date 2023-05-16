@@ -11,15 +11,18 @@
   <ion-grid>
     <ion-row>
       <ion-col text-center>
-        <ion-button (click)="selectImage()">Select Images</ion-button>
+        <input (change)="inputChange($event)" style="display:none;" type="file"
+          accept="image/jpeg, image/png, image/jpg" #upload>
+        <ion-button (click)="upload.click()">Select Images</ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <h4 *ngIf="croppedImgUrl.length">Cropped File</h4>
+        <!-- <h4 *ngIf="croppedImgUrl.length">Cropped File</h4> -->
         <p *ngIf="loading">Loading ...</p>
+        <output #output></output>
 
-        <img [src]="croppedImgUrl" />
+        <!-- <img [src]="croppedImgUrl" /> -->
       </ion-col>
     </ion-row>
   </ion-grid>

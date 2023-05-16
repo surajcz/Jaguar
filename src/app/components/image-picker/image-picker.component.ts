@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
@@ -13,6 +13,7 @@ import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
   styleUrls: ['./image-picker.component.scss'],
 })
 export class ImagePickerComponent implements OnInit {
+  @ViewChild('output') output: any;
   croppedImgUrl = "";
   loading = false;
   pickerOptions: ImagePickerOptions = {
@@ -22,6 +23,8 @@ export class ImagePickerComponent implements OnInit {
   cropOpt: CropOptions = {
     quality: 55
   }
+
+  imagesArray: any[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -103,5 +106,35 @@ export class ImagePickerComponent implements OnInit {
       console.error(error);
       this.loading = false;
     });
+  }
+
+
+  inputChange(val: any) {
+    console.log('<<<<<<<working>>>>', val.target.files)
+    const file = val.target.files;
+    this.imagesArray.push(file[0]);
+    this.displayImages()
+  }
+
+  displayImages() {
+    let images = ""
+    this.imagesArray.forEach((image: any, index: any) => {
+      images += `<div class="image">
+      <img src="${URL.createObjectURL(image)}" alt="image">
+      <span (click)="deleteImage(${index})">X</span>
+      </div>`
+    })
+    this.output.nativeElement.innerHTML = images;
+    console.log('OUTPUT---before', this.output)
+  }
+
+  deleteImage(index: any) {
+    console.log('deleteImage', index)
+    if (index == 0) {
+      this.imagesArray.pop()
+    } else {
+      this.imagesArray.splice(index, 1)
+    }
+    this.displayImages()
   }
 }

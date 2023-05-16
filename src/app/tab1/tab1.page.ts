@@ -1,3 +1,4 @@
+import { EventsService } from './../services/events.service';
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ImagePickerComponent } from '../components/image-picker/image-picker.component';
@@ -16,6 +17,7 @@ export class Tab1Page {
 
   constructor(
     private modalCtrl: ModalController,
+    private events: EventsService
   ) { }
 
   onVoted(data: any) {
@@ -33,6 +35,7 @@ export class Tab1Page {
     this.agreed = 0;
     this.disagreed = 0;
     this.resetCount = true;
+    this.events.publish('resetCount', '0');
   }
 
   async openModal(val: any) {

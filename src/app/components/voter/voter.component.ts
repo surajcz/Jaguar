@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { EventsService } from 'src/app/services/events.service';
 
 @Component({
   selector: 'app-voter',
@@ -11,16 +12,14 @@ export class VoterComponent implements OnInit {
   @Output() voted = new EventEmitter<any>();
   didVote = false;
 
-  constructor() { }
+  constructor(
+    private events: EventsService
+  ) { }
 
   ngOnInit() {
-    setTimeout(() => {
-      console.log('---ngoninit')
-      if (this.resetCount) {
-        console.log('---ngoninit----IF')
-        this.didVote = false;
-      }
-    }, 1000);
+    this.events.subscribe('resetCount', (res) => {
+      this.didVote = false;
+    });
   }
 
   vote(agreed: any) {
