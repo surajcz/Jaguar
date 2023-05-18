@@ -1,5 +1,7 @@
 import { EventsService } from './../services/events.service';
+import { AuthenticationService } from './../services/authentication.service';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { ImagePickerComponent } from '../components/image-picker/image-picker.component';
 
@@ -17,7 +19,9 @@ export class Tab1Page {
 
   constructor(
     private modalCtrl: ModalController,
-    private events: EventsService
+    private events: EventsService,
+    private authService: AuthenticationService,
+    private router: Router
   ) { }
 
   onVoted(data: any) {
@@ -48,6 +52,12 @@ export class Tab1Page {
     });
     modal.present();
 
+  }
+
+
+  async logout() {
+    await this.authService.logout();
+    this.router.navigateByUrl('/', { replaceUrl: true });
   }
 
 }

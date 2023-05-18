@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 import { HttpClient } from '@angular/common/http';
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
-
 
 import {
   ActionPerformed,
@@ -12,6 +11,7 @@ import {
   PushNotifications,
   Token,
 } from '@capacitor/push-notifications';
+import { ChartComponent } from '../components/chart/chart.component';
 
 @Component({
   selector: 'app-tab3',
@@ -41,7 +41,8 @@ export class Tab3Page implements OnInit {
     private googlePlus: GooglePlus,
     private http: HttpClient,
     public plt: Platform,
-    private fb: Facebook
+    private fb: Facebook,
+    private modalCtrl: ModalController
   ) {
     fb.getLoginStatus()
       .then(res => {
@@ -150,6 +151,15 @@ export class Tab3Page implements OnInit {
     this.fb.logout()
       .then(res => this.isLoggedIn = false)
       .catch(e => console.log('Error logout from Facebook', e));
+  }
+
+
+
+  async goToChart() {
+    const modal = await this.modalCtrl.create({
+      component: ChartComponent,
+    });
+    modal.present();
   }
 
 }
