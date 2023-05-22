@@ -12,6 +12,7 @@ import {
   Token,
 } from '@capacitor/push-notifications';
 import { ChartComponent } from '../components/chart/chart.component';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-tab3',
@@ -42,7 +43,8 @@ export class Tab3Page implements OnInit {
     private http: HttpClient,
     public plt: Platform,
     private fb: Facebook,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private authService: AuthenticationService
   ) {
     fb.getLoginStatus()
       .then(res => {
@@ -54,6 +56,18 @@ export class Tab3Page implements OnInit {
         }
       })
       .catch(e => console.log(e));
+
+
+    this.authService.getData('workout-list').subscribe((res) => {
+      console.log('---->', res)
+      res.forEach((val) => {
+        if (val.id == 'yjihlnL3aNAxx42RekBg') {
+          this.authService.getData('workout-list/yjihlnL3aNAxx42RekBg/categories').subscribe((res) => {
+            console.log('---->category', res)
+          })
+        }
+      })
+    });
   }
 
 

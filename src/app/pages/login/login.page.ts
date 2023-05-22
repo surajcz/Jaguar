@@ -5,6 +5,9 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 // import { AngularFireAuth } from '@angular/fire/compat/auth';
 
+import { Storage } from '@capacitor/storage';
+const TOKEN_KEY = 'fbase_key';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -12,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
   credentials: FormGroup = new FormGroup({});
+  userData: any;
 
   constructor(
     private fb: FormBuilder,
@@ -24,8 +28,8 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.credentials = this.fb.group({
-      email: ['eve.holt@reqres.in', [Validators.required, Validators.email]],
-      password: ['cityslicka', [Validators.required, Validators.minLength(6)]]
+      email: ['test@test.com', [Validators.required, Validators.email]],
+      password: ['test123', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -33,30 +37,16 @@ export class LoginPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    // this.authService.login(this.credentials.value).subscribe(
-    //   async (res) => {
-    //     await loading.dismiss();
-    //     this.router.navigateByUrl('/tabs', { replaceUrl: true });
-    //   },
-    //   async (res) => {
-    //     await loading.dismiss();
-    //     const alert = await this.alertController.create({
-    //       header: 'Login failed',
-    //       message: res.error.error,
-    //       buttons: ['OK']
-    //     });
-
-    //     await alert.present();
-    //   }
-    // );
-
-
-    const user = await this.authService.login(this.credentials.value.email, this.credentials.value.password);
+    const user = await this.authService.register(this.credentials.value.email, this.credentials.value.password);
     await loading.dismiss();
     console.log('user---------', user)
 
-    if (user) {
-      this.router.navigateByUrl('/home', { replaceUrl: true });
+    this.userData = user;
+
+    if (this.userData) {
+
+      Storage.set({ key: TOKEN_KEY, value: this.userData.user.accessToken })
+      this.router.navigateByUrl('/tabs', { replaceUrl: true });
     } else {
       alert('Login failed, Please try again!');
     }
@@ -72,10 +62,10 @@ export class LoginPage implements OnInit {
   }
 
   async googleLogin() {
-    const user = await this.authService.login(this.credentials.value.email, this.credentials.value.password);
+    const user = await this.authService.googleAuth();
     console.log('user---------', user)
     if (user) {
-      this.router.navigateByUrl('/home', { replaceUrl: true });
+      this.router.navigateByUrl('/tabs', { replaceUrl: true });
     } else {
       alert('Login failed, Please try again!');
     }
