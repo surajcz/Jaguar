@@ -16,7 +16,9 @@ import {
   GoogleAuthProvider,
   signInWithRedirect,
   getRedirectResult,
-  signInWithPopup
+  signInWithPopup,
+  signInWithCredential,
+  FacebookAuthProvider
 } from '@angular/fire/auth';
 import {
   Firestore,
@@ -102,8 +104,13 @@ export class AuthenticationService {
   async login(email: any, password: any) {
     try {
       const user = await signInWithEmailAndPassword(this.auth, email, password);
+      if (user) {
+        this.isAuthenticated.next(true);
+      }
       return user;
     } catch (e) {
+      this.isAuthenticated.next(false);
+
       return null;
     }
   }
@@ -113,6 +120,8 @@ export class AuthenticationService {
       const provider = new GoogleAuthProvider();
 
       const auth = getAuth();
+
+
       let redirectUser = signInWithPopup(auth, provider)
         .then((result: any) => {
           // This gives you a Google Access Token. You can use it to access the Google API.
@@ -136,32 +145,32 @@ export class AuthenticationService {
 
 
 
-      //   signInWithRedirect(auth, provider);
+      // signInWithRedirect(auth, provider);
 
-      //   let redirectUser = getRedirectResult(auth)
-      //     .then((result: any) => {
-      //       console.log('redirectUser-----result', result)
-      //       // This gives you a Google Access Token. You can use it to access Google APIs.
-      //       const credential = GoogleAuthProvider.credentialFromResult(result);
-      //       const token = credential?.accessToken;
+      // let redirectUser = getRedirectResult(auth)
+      //   .then((result: any) => {
+      //     console.log('redirectUser-----result', result)
+      //     // This gives you a Google Access Token. You can use it to access Google APIs.
+      //     const credential = GoogleAuthProvider.credentialFromResult(result);
+      //     const token = credential?.accessToken;
 
-      //       // The signed-in user info.
-      //       const user = result.user;
-      //       // IdP data available using getAdditionalUserInfo(result)
-      //       // ...
-      //       console.log('redirectUser------user', user)
-      //       return user;
-      //     }).catch((error) => {
-      //       // Handle Errors here.
-      //       const errorCode = error.code;
-      //       const errorMessage = error.message;
-      //       // The email of the user's account used.
-      //       const email = error.customData.email;
-      //       // The AuthCredential type that was used.
-      //       const credential = GoogleAuthProvider.credentialFromError(error);
-      //       // ...
-      //     })
-      //   return redirectUser;
+      //     // The signed-in user info.
+      //     const user = result.user;
+      //     // IdP data available using getAdditionalUserInfo(result)
+      //     // ...
+      //     console.log('redirectUser------user', user)
+      //     return user;
+      //   }).catch((error) => {
+      //     // Handle Errors here.
+      //     const errorCode = error.code;
+      //     const errorMessage = error.message;
+      //     // The email of the user's account used.
+      //     const email = error.customData.email;
+      //     // The AuthCredential type that was used.
+      //     const credential = GoogleAuthProvider.credentialFromError(error);
+      //     // ...
+      //   })
+
       return redirectUser;
 
     } catch (e) {
@@ -170,7 +179,7 @@ export class AuthenticationService {
   }
 
   async facebookAuth() {
-    this.fb.login(['email'])
+    this.fb.login(['public_profile'])
       .then((response: FacebookLoginResponse) => {
         this.onLoginSuccess(response);
         console.log(response.authResponse.accessToken);
@@ -182,11 +191,11 @@ export class AuthenticationService {
 
   onLoginSuccess(res: FacebookLoginResponse) {
     // const { token, secret } = res;
-    const credential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
-    this.fireAuth.signInWithCredential(credential)
-      .then((response) => {
-        this.router.navigate(['/profile']);
-        this.loading.dismiss();
+    const credential = FacebookAuthProvider.credential(res.authResponse.accessToken);
+    signInWithCredential(this.auth, credential)
+      .then((response: any) => {
+        console.log('response', response)
+        // this.router.navigate(['/profile']);
       });
 
   }

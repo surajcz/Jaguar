@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { Storage } from '@capacitor/storage';
 const TOKEN_KEY = 'fbase_key';
 
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -32,6 +34,13 @@ export class LoginPage implements OnInit {
       password: ['test123', [Validators.required, Validators.minLength(6)]]
     });
   }
+
+
+  async doLogin() {
+    const user = await GoogleAuth.signIn();
+    console.log('user>>>', user)
+  }
+
 
   async login() {
     const loading = await this.loadingController.create();
