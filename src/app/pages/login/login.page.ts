@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    const user = await this.authService.register(this.credentials.value.email, this.credentials.value.password);
+    const user = await this.authService.login(this.credentials.value.email, this.credentials.value.password);
     await loading.dismiss();
     console.log('user---------', user)
 
@@ -71,14 +71,8 @@ export class LoginPage implements OnInit {
     }
   }
 
-  // AuthLogin(provider: any) {
-  //   return this.ngFireAuth
-  //     .signInWithPopup(provider)
-  //     .then((result) => {
-  //       console.log(result)
-  //     })
-  //     .catch((error) => {
-  //       alert(error);
-  //     });
-  // }
+
+  async facebookLogin() {
+    const user = await this.authService.facebookAuth();
+  }
 }

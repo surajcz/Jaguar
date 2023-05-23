@@ -31,6 +31,8 @@ import {
   collectionData
 } from '@angular/fire/firestore';
 
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,7 +44,8 @@ export class AuthenticationService {
   constructor(
     private firestore: Firestore,
     private http: HttpClient,
-    private auth: Auth
+    private auth: Auth,
+    private fb: Facebook
   ) {
     this.loadToken();
   }
@@ -165,6 +168,12 @@ export class AuthenticationService {
       return null;
     }
   }
+
+  async facebookAuth() {
+
+  }
+
+
 
   logout() {
     this.isAuthenticated.next(false);
