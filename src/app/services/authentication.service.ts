@@ -170,6 +170,24 @@ export class AuthenticationService {
   }
 
   async facebookAuth() {
+    this.fb.login(['email'])
+      .then((response: FacebookLoginResponse) => {
+        this.onLoginSuccess(response);
+        console.log(response.authResponse.accessToken);
+      }).catch((error) => {
+        console.log(error);
+        alert('error:' + error);
+      });
+  }
+
+  onLoginSuccess(res: FacebookLoginResponse) {
+    // const { token, secret } = res;
+    const credential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
+    this.fireAuth.signInWithCredential(credential)
+      .then((response) => {
+        this.router.navigate(['/profile']);
+        this.loading.dismiss();
+      });
 
   }
 
