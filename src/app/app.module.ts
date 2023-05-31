@@ -23,6 +23,10 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 
+
+
+import { Chooser } from '@ionic-native/chooser/ngx';
+import { FilePath } from '@awesome-cordova-plugins/file-path/ngx';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -42,6 +46,8 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
     GooglePlus,
     Facebook,
     Vibration,
+    Chooser,
+    FilePath,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

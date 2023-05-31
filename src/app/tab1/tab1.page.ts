@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { ImagePickerComponent } from '../components/image-picker/image-picker.component';
 
+import { Chooser } from '@ionic-native/chooser/ngx';
+import { FilePath } from '@awesome-cordova-plugins/file-path/ngx';
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -21,7 +24,9 @@ export class Tab1Page {
     private modalCtrl: ModalController,
     private events: EventsService,
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    public chooser: Chooser,
+    public filePath: FilePath
   ) { }
 
   onVoted(data: any) {
@@ -54,10 +59,23 @@ export class Tab1Page {
 
   }
 
-
   async logout() {
     await this.authService.logout();
     this.router.navigateByUrl('/', { replaceUrl: true });
+  }
+
+
+
+
+  openFileSystem() {
+    this.chooser.getFileMetadata().then((file) => {
+      console.log('file', file);
+      let uri: any = file?.uri;
+      this.filePath.resolveNativePath(uri).then(async (fp) => {
+        console.log('fp', fp);
+      })
+    })
+
   }
 
 }
