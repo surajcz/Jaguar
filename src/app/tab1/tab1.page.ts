@@ -7,7 +7,7 @@ import { ImagePickerComponent } from '../components/image-picker/image-picker.co
 
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { FilePath } from '@awesome-cordova-plugins/file-path/ngx';
-
+import { FilePicker } from '@robingenz/capacitor-file-picker';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -67,15 +67,24 @@ export class Tab1Page {
 
 
 
-  openFileSystem() {
-    this.chooser.getFileMetadata().then((file) => {
-      console.log('file', file);
-      let uri: any = file?.uri;
-      this.filePath.resolveNativePath(uri).then(async (fp) => {
-        console.log('fp', fp);
-      })
-    })
+  async openFileSystem() {
+    const result = await FilePicker.pickFiles({
+      types: [],
+      multiple: false,
+    });
+    console.log('result', result)
+    // this.chooser.getFileMetadata().then((file) => {
+    //   console.log('file', file);
+    //   let uri: any = file?.uri;
+    //   this.filePath.resolveNativePath(uri).then(async (fp) => {
+    //     console.log('fp', fp);
+    //   })
+    // })
 
+  }
+
+  saveAsMp3(event: any) {
+    console.log('event>>>>>>', event);
   }
 
 }

@@ -10,13 +10,15 @@ import { Level102Component } from '../components/level102/level102.component';
 import { NameChildComponent } from '../components/name-child/name-child.component';
 import { VoterComponent } from '../components/voter/voter.component';
 import { ImagePickerComponent } from '../components/image-picker/image-picker.component';
+import { NgxMicRecorderModule } from 'ngx-mic-recorder';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    Tab1PageRoutingModule
+    Tab1PageRoutingModule,
+    NgxMicRecorderModule
   ],
   declarations: [
     Tab1Page,
